@@ -1,0 +1,50 @@
+extends layout
+
+block content
+	.view-control
+		ul View Mode
+			li
+				a.changeBT oceans
+			li
+				a.changeBT satellite
+	.row.cover-panel
+		.panel-right.col-xs-12.col-sm-8.col-sm-offset-4.col-md-4.col-md-offset-8.col-lg-3.col-lg-offset-9
+			button#hide-right-panel.btn.btn-default(type='button')
+				span.glyphicon.glyphicon-menu-right
+	//.preview.modal.fade(tabindex="-1", role="dialog")
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type="button", data-dismiss="modal", aria-label="Close")
+						span(aria-hidden="true") &#215;
+					h4.modal-title Modal title
+				.modal-body
+					h3 South China Sea
+					figure
+						img.prev-img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/South_China_Sea.jpg/330px-South_China_Sea.jpg',alt='satellite map of SCS')
+						figcaption The northeastern portion of the South China Sea
+					p
+						|Chinese name
+						|Simplified Chinese	南海
+						|Traditional Chinese	南海
+						|Hanyu Pinyin	Nán Hǎi
+						|Literal meaning	South Sea
+						|Transcriptions
+						|Alternative Chinese name
+						|Simplified Chinese	南中国海
+						|Traditional Chinese	南中國海
+						|Hanyu Pinyin	Nán Zhōngguó Hǎi
+						|Literal meaning	South China Sea
+				.modal-footer
+					button.btn.btn-default(type="button", data-dismiss="modal") Close
+					button.btn.btn-primary(type="button") Save changes
+	#viewDiv
+	script(src='/javascripts/jquery-2.1.4.min.js')
+	script(src='/javascripts/coffee-script.js')
+	script(src='https://cdn.jsdelivr.net/jquery.ui/1.11.4/jquery-ui.min.js')
+	script(src='/javascripts/bootstrap-min.js')
+	script(src='/javascripts/underscore-min.js')
+	//script(src='https://js.arcgis.com/3.15/')
+	script(src='/arcgis_js_api/init.js')
+	script(type='text/coffeescript' src='/javascripts/maps.coffee')
+	//script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous")
