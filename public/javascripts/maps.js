@@ -1,7 +1,6 @@
 require([
     "esri/Map",
     "esri/views/SceneView",
-    "esri/tasks/Locator",
     "esri/layers/GraphicsLayer",
     "esri/geometry/Polyline",
     "esri/symbols/SimpleLineSymbol",
@@ -11,7 +10,6 @@ require([
     "dojo/domReady!"
 ], function(Map,
     SceneView,
-    Locator,
     GraphicsLayer,
     Polyline,
     SimpleLineSymbol,
@@ -20,32 +18,6 @@ require([
     PopupTemplate) {
     //$(document).ready(function() {
 
-    var datas = [{
-        path: [
-            [112, 12],
-            [116, 16]
-        ]
-    }, {
-        path: [
-            [112.5, 11.5],
-            [116, 16]
-        ]
-    }, {
-        path: [
-            [113, 11],
-            [116, 16]
-        ]
-    }, {
-        path: [
-            [113.5, 11.5],
-            [116, 16]
-        ]
-    }, {
-        path: [
-            [114, 12],
-            [116, 16]
-        ]
-    }]
     setView('oceans');
     $('.changeBT').click(function() {
         $('body').find('#viewDiv').remove();
@@ -53,6 +25,7 @@ require([
         $('body').append(newDiv);
         setView($(this).text());
     });
+    //var graphics = [];
 
     function setView(baseType) {
         var map = new Map({
@@ -63,76 +36,57 @@ require([
         var view = new SceneView({
             container: "viewDiv", //reference to the scene div created in step 5
             map: map, //reference to the map object created before the scene
-            scale: 5000000, //sets the initial scale to 1:50,000,000
-            center: [115, 15, 0], //sets the center point of view with lon/lat
+            scale: 6000000, //sets the initial scale to 1:50,000,000
+            center: [146, 16, 0], //sets the center point of view with lon/lat
         });
-        view.on('click', function(evt) {
-            console.log(evt);
-            if (evt.graphic) {
-                $('.panel-right').find('p').remove();
-                evt.graphic.symbol = new SimpleLineSymbol({
-                    color: [26, 119, 40], //RGB color values as an array
-                    width: 4
-                });
-                $('.panel-right').append($('<p>').text(JSON.stringify(evt.graphic)));
-                $('.cover-panel').show('fast');
-                $('.panel-right').show('slide', {
-                    direction: 'right'
-                }, 1000);
-            }
-        });
-        /* var view = new MapView({
+        /*var view = new MapView({
             container: "viewDiv", //reference to the scene div created in step 5
             map: map, //reference to the map object created before the scene
             zoom: 7, //sets the zoom level based on level of detail (LOD)
-            center: [115, 15] //sets the center point of view in lon/lat
+            center: [146, 16] //sets the center point of view in lon/lat
         });
         */
         view.then(function() {
-            console.log('viewed');
             $('#hide-right-panel').click(function() {
                 $('.panel-right').hide('slide', {
                     direction: 'right'
                 }, 1000);
                 $('.cover-panel').hide('slow');
             })
-            var graphicsLayer = new GraphicsLayer();
-            map.add(graphicsLayer);
-            _.each(datas, function(data, index, list) {
-                addNewGraphic(graphicsLayer, data);
+            var layer1 = new GraphicsLayer({
+                id: 'layer1'
             });
+            map.add(layer1);
+            $.get('/graphics', function(datas) {
+                _.each(datas, function(data, index) {
+                    addNewGraphic(layer1, data);
+                });
+            })
         })
     };
 
     function addNewGraphic(graphicsLayer, data) {
-        var polyline = new Polyline({
-            paths: data.path
-        });
+        var polyline = new Polyline(data.path);
         var lineSymbol = new SimpleLineSymbol({
-            color: [226, 119, 40], //RGB color values as an array
-            width: 4
+            color: 'red', //RGB color values as an array
+            width: 2
         });
-        var lineAtt = {
-            Name: "Keystone Pipeline", //The name of the pipeline
-            Owner: "TransCanada", //The owner of the pipeline
-            Length: "3,456 km" //The length of the pipeline
-        };
+        var newContent = '<img class="prev-img" src=' + data.img.substring(0, data.img.lastIndexOf('.')) + "-min.jpg" + ' alt="image preview" data-raw=' + data.img + ' onclick="showImg(this)" />' +
+            '<li>start: lat=' + data.path[0][0] + ' lon=' + data.path[0][1] + ' alt=' + data.path[0][2] + '</li>' +
+            '<li>end: lat=' + data.path[1][0] + ' lon=' + data.path[1][1] + ' alt=' + data.path[1][2] + '</li>' +
+            '<a href=' + data.img + ' download=' + data.img.substring(data.img.lastIndexOf('/')) + '><span class="glyphicon glyphicon-save" />download</a>';
+            $('#full-list').append($('<div>').append($('<h4>').text(data.name)).append(newContent));
         var polylineGraphic = new Graphic({
             geometry: polyline, //add the geometry created in step 4
             symbol: lineSymbol, //add the symbol created in step 5
-            attributes: lineAtt, //add the attributes created in step 6
             popupTemplate: new PopupTemplate({
-                title: "Popup Tile",
-                //Four fields are used in this template. The value of the selected feature will be
-                //inserted in the location of each field name below
-                content: "<p>content of popup</p>" +
-                    "<ul><li>li01</li>" +
-                    "<li>li02</li>" +
-                    "<li>li03</li><ul>"
+                title: data.name,
+                content: newContent
             })
         });
         //Add the graphic to the GraphicsLayer
         graphicsLayer.add(polylineGraphic); //graphicsLayer was created in step 2
+        //graphics.push(polylineGraphic);
     };
     //})
 });

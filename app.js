@@ -21,8 +21,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/arcgis_js_api', express.static('../arcgis_js_api/4.0beta2'));
+app.use('/arcgis_js_api', express.static('../arcgis_js_api/4.0beta3'));
 app.use('/fonts', express.static('./public/fonts'));
+app.use('/lib', express.static('../lib'));
 //app.use('/arcgis_js_api', express.static('../arcgis_js_api/3.15compact'));
 
 app.use('/', routes);
