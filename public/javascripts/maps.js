@@ -75,7 +75,7 @@ require([
             '<li>start: lat=' + data.path[0][0] + ' lon=' + data.path[0][1] + ' alt=' + data.path[0][2] + '</li>' +
             '<li>end: lat=' + data.path[1][0] + ' lon=' + data.path[1][1] + ' alt=' + data.path[1][2] + '</li>' +
             '<a href=' + data.img + ' download=' + data.img.substring(data.img.lastIndexOf('/')) + '><span class="glyphicon glyphicon-save" />download</a>';
-            $('#full-list').append($('<div>').append($('<h4>').text(data.name)).append(newContent));
+            $('.list-body').append($('<div>').attr('class','list-item').append($('<h4>').text(data.name)).append(newContent));
         var polylineGraphic = new Graphic({
             geometry: polyline, //add the geometry created in step 4
             symbol: lineSymbol, //add the symbol created in step 5

@@ -21,7 +21,12 @@ router.get('/', function(req, res, next) {
         title: 'View'
     });
 });
-
+router.get('/tinymce', function(req, res, next) {
+    res.render('tinymce');
+});
+router.post('/tinymce', function(req, res, next) {
+    console.log(req);
+});
 
 MongoClient.connectAsync(url).then(function(db) {
     console.log('mongoDB connected!');

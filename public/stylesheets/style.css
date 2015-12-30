@@ -2,6 +2,15 @@ html,
 body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
+}
+.esri-ui-top-left{
+    z-index:10
+}
+#gismap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 .popup-img {
@@ -17,28 +26,100 @@ body {
 .view-control {
     opacity: 0.8;
     padding: 10px 10px 10px 10px;
-    width: 320px;
-    left: 60px;
+    position: absolute;
+    left: 0px;
     z-index: 9;
     background-color: white;
 }
 
-#full-list {
-    padding: 10px 10px 10px 10px;
-    min-width: 320px;
-    opacity: 0.8;
-    min-height: 480px;
-    max-height: 720px;
-    overflow: scroll;
-    z-index: 9;
-    background-color: white;
-}
-
-#full-list:hover,
 .view-control:hover {
     opacity: 1;
 }
+@keyframes show-list{
+    from {
+        bottom: -240px;
+    }
+    to {
+        bottom: 0px;
+    }
+}
+span{
+    cursor: pointer;
+}
+.list-div{
+    position: absolute;
+    width: 100%;
+    bottom: -240px;
+    opacity: 0.8;
+}
+.list-head{
+    position: relative;
+    left:50%;
+    color:white;
+    width:40px;
+    height:40px;
+}
+.list-btn{
+    position: relative;
+    left:-20px;
+    top:10px;
+    color:white;
+    width:40px;
+    height:40px;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 40px;
+    box-shadow: inset 0px 0px 100px 0px rgba(0, 0, 0, 0.3);
+    z-index: 9;
+}
+.btn-pinned{
+    -ms-transform: rotate(315deg); /* IE 9 */
+    -webkit-transform: rotate(315deg); /* Safari */
+    transform: rotate(315deg);
+}
+.show-list,.hide-list{
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */
+    transform: rotate(180deg);
+}
+.list-head{
+    position: relative;
+    width: 100%;
+}
+.list-body{
+    position: relative;
+    bottom: 0px;
+    width: 100%;
+    height: 241px;
+    padding: 10px;
+    overflow: scroll;
+    background-color: white;
+    box-shadow: 0px -5px 24px -5px rgba(0, 0, 0, 0.6);
+}
+.list-item{
+    display: inline-block;
+    max-width: 320px;;
+}
+.list-btn:hover,.list-body:hover{
+    opacity: 1;
+}
 
+.list-div-toggle:hover{
+    animation-name: show-list;
+    animation-duration: 0.8s;
+}
+.list-shown {
+    animation-name: show-list;
+    animation-duration: 2s;
+    bottom: 0px;
+}
+.list-hidden{
+    animation-name: show-list;
+    animation-duration: 1s;
+    animation-direction: reverse;
+    bottom: -240px;
+}
 .full-img {
     position: absolute;
     z-index: -99;
@@ -54,7 +135,11 @@ a {
     color: #00B7FF;
     cursor: pointer;
 }
-
+.select-basemap,
+.select-layers{
+    position: relative;
+    left:50px;
+}
 .cover-panel {
     position: absolute;
     width: 100%;

@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	form(method='post' action='/tinymce' enctype='multipart/form-data')
+		input(type='submit')
+		p.active write here
+	script(src='/javascripts/jquery-2.1.4.min.js')
+	script(src='/javascripts/tinymce/tinymce.min.js')
+	script(src='/javascripts/mymce.js')
