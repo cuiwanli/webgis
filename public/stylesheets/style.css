@@ -4,9 +4,11 @@ body {
     padding: 0;
     overflow: hidden;
 }
-.esri-ui-top-left{
-    z-index:10
+
+.esri-ui-top-left {
+    top: 30px;
 }
+
 #gismap {
     position: absolute;
     width: 100%;
@@ -23,103 +25,184 @@ body {
     height: 100%;
 }
 
-.view-control {
-    opacity: 0.8;
-    padding: 10px 10px 10px 10px;
+.view-control-btn {
+    color: white;
     position: absolute;
-    left: 0px;
+    top: 10px;
+    left: 20px;
     z-index: 9;
-    background-color: white;
 }
 
-.view-control:hover {
-    opacity: 1;
+.hide-view-control-btn {
+    position: absolute;
+    right:10px;
+    top:10px;
 }
-@keyframes show-list{
+
+.view-control {
+    height: 100%;
+    padding: 48px 10px 10px 10px;
+    position: absolute;
+    z-index: 8;
+    background-color: white;
+    overflow: hidden;
+    box-shadow: 0px 0px 24px -5px rgba(0, 0, 0, 0.6);
+}
+
+.view-control-hidden {
+    animation: show-control 1s 0 reverse;
+    left: -100%;
+}
+.view-control-shown {
+    animation-name: show-control ;
+    animation-duration:1s  ;
+    animation-timing-function: ease-in;
+    left: 0%;
+}
+.view-control>div {
+    border-top:1px solid lightgray;
+    padding: 12px 0px 4px 8px;
+}
+
+@keyframes show-control {
     from {
-        bottom: -240px;
+        left: -80%;
+    }
+    to {
+        left: 0%;
+    }
+}
+
+@keyframes show-list {
+    from {
+        bottom: -260px;
     }
     to {
         bottom: 0px;
     }
 }
-span{
+
+span {
     cursor: pointer;
 }
-.list-div{
+
+.list-div {
     position: absolute;
     width: 100%;
-    bottom: -240px;
+    bottom: -260px;
     opacity: 0.8;
 }
-.list-head{
+
+.list-head {
     position: relative;
-    left:50%;
-    color:white;
-    width:40px;
-    height:40px;
+    left: 50%;
+    color: white;
+    width: 40px;
+    height: 40px;
 }
-.list-btn{
+
+.list-btn {
     position: relative;
-    left:-20px;
-    top:10px;
-    color:white;
-    width:40px;
-    height:40px;
+    left: -20px;
+    top: 10px;
+    color: white;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
     font-size: 20px;
     padding: 10px;
     border-radius: 40px;
     box-shadow: inset 0px 0px 100px 0px rgba(0, 0, 0, 0.3);
-    z-index: 9;
+    z-index: 10;
 }
-.btn-pinned{
-    -ms-transform: rotate(315deg); /* IE 9 */
-    -webkit-transform: rotate(315deg); /* Safari */
+
+.btn-pinned {
+    -ms-transform: rotate(315deg);
+    /* IE 9 */
+    -webkit-transform: rotate(315deg);
+    /* Safari */
     transform: rotate(315deg);
 }
-.show-list,.hide-list{
-    -ms-transform: rotate(180deg); /* IE 9 */
-    -webkit-transform: rotate(180deg); /* Safari */
-    transform: rotate(180deg);
-}
-.list-head{
+
+
+.list-head {
     position: relative;
     width: 100%;
 }
-.list-body{
+
+.list-nav {
+    width: 40px;
+    padding: 8px;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+}
+
+.list-nav>span {
+    font-size: 24px;
+    position: relative;
+}
+
+.list-nav-left {
+    left: 0px;
+}
+
+.list-nav-right {
+    right: 0px;
+}
+
+.list-body {
     position: relative;
     bottom: 0px;
     width: 100%;
-    height: 241px;
-    padding: 10px;
-    overflow: scroll;
+    height: 261px;
+    padding: 5px 40px 4px 40px;
     background-color: white;
-    box-shadow: 0px -5px 24px -5px rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 0px 24px -5px rgba(0, 0, 0, 0.6);
+    resize: vertical;
+    overflow: hidden;
+    z-index: 9;
 }
-.list-item{
+
+.list-item {
     display: inline-block;
-    max-width: 320px;;
+    margin: auto;
+    overflow: hidden;
+    border-left: 1px solid lightgray;
 }
-.list-btn:hover,.list-body:hover{
+
+.list-item:first-child {
+    border-left: 0px solid lightgray;
+}
+
+.list-item-name {
+    cursor: pointer;
+}
+
+.list-btn:hover,
+.list-body:hover {
     opacity: 1;
 }
 
-.list-div-toggle:hover{
+.list-div-toggle:hover {
     animation-name: show-list;
     animation-duration: 0.8s;
 }
+
 .list-shown {
     animation-name: show-list;
     animation-duration: 2s;
     bottom: 0px;
 }
-.list-hidden{
+
+.list-hidden {
     animation-name: show-list;
     animation-duration: 1s;
     animation-direction: reverse;
-    bottom: -240px;
+    bottom: -260px;
 }
+
 .full-img {
     position: absolute;
     z-index: -99;
@@ -128,18 +211,15 @@ span{
 
 .prev-img {
     cursor: zoom-in;
-    max-width: 280px;
+    max-width: 90%;
 }
 
 a {
     color: #00B7FF;
     cursor: pointer;
 }
-.select-basemap,
-.select-layers{
-    position: relative;
-    left:50px;
-}
+
+
 .cover-panel {
     position: absolute;
     width: 100%;

@@ -17,7 +17,7 @@ require([
     Popup,
     PopupTemplate) {
     //$(document).ready(function() {
-
+var map, view;
     setView('oceans');
     $('.changeBT').click(function() {
         $('body').find('#viewDiv').remove();
@@ -28,18 +28,18 @@ require([
     //var graphics = [];
 
     function setView(baseType) {
-        var map = new Map({
+        map = new Map({
             basemap: baseType
         });
 
         console.log('mapped');
-        var view = new SceneView({
+        view = new SceneView({
             container: "viewDiv", //reference to the scene div created in step 5
             map: map, //reference to the map object created before the scene
             scale: 6000000, //sets the initial scale to 1:50,000,000
             center: [146, 16, 0], //sets the center point of view with lon/lat
         });
-        /*var view = new MapView({
+        /*view = new MapView({
             container: "viewDiv", //reference to the scene div created in step 5
             map: map, //reference to the map object created before the scene
             zoom: 7, //sets the zoom level based on level of detail (LOD)
@@ -71,11 +71,10 @@ require([
             color: 'red', //RGB color values as an array
             width: 2
         });
-        var newContent = '<img class="prev-img" src=' + data.img.substring(0, data.img.lastIndexOf('.')) + "-min.jpg" + ' alt="image preview" data-raw=' + data.img + ' onclick="showImg(this)" />' +
-            '<li>start: lat=' + data.path[0][0] + ' lon=' + data.path[0][1] + ' alt=' + data.path[0][2] + '</li>' +
-            '<li>end: lat=' + data.path[1][0] + ' lon=' + data.path[1][1] + ' alt=' + data.path[1][2] + '</li>' +
+        var newContent = '<div>start: lat=' + data.path[0][0] + ' lon=' + data.path[0][1] + '</div>' +
+            '<div>end: lat=' + data.path[1][0] + ' lon=' + data.path[1][1] + '</div>' +
+            '<img class="prev-img" src=' + data.img.substring(0, data.img.lastIndexOf('.')) + "-min.jpg" + ' alt="image preview" data-raw=' + data.img + ' onclick="showImg(this)" />' +
             '<a href=' + data.img + ' download=' + data.img.substring(data.img.lastIndexOf('/')) + '><span class="glyphicon glyphicon-save" />download</a>';
-            $('.list-body').append($('<div>').attr('class','list-item').append($('<h4>').text(data.name)).append(newContent));
         var polylineGraphic = new Graphic({
             geometry: polyline, //add the geometry created in step 4
             symbol: lineSymbol, //add the symbol created in step 5
@@ -84,6 +83,9 @@ require([
                 content: newContent
             })
         });
+        $('.list-body').append($('<div>').attr('class', 'list-item col-xs-12 col-sm-6 col-md-4 col-lg3').append($('<h4>').attr('class','list-item-name').text(data.name)).click(function(){
+            view.animateTo(polylineGraphic);
+        }).append(newContent));
         //Add the graphic to the GraphicsLayer
         graphicsLayer.add(polylineGraphic); //graphicsLayer was created in step 2
         //graphics.push(polylineGraphic);

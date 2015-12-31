@@ -2,7 +2,11 @@ extends layout
 
 block content
 	#gismap
-		.view-control.col-xs-12.col-sm-12.col-md-4.col-lg-3
+		.view-control-btn
+			span.glyphicon.glyphicon-list
+		.view-control.view-control-hidden.col-xs-5.col-sm-5.col-md-4.col-lg-3
+			.hide-view-control-btn(title='hide')
+				span.glyphicon.glyphicon-menu-left
 			.select-basemap
 				label View Mode
 				ul
@@ -29,7 +33,11 @@ block content
 		.list-div.list-div-toggle
 			.list-head
 				span.glyphicon.glyphicon-menu-up.list-btn(title='come out!')
+			.list-nav.list-nav-left
+				span.glyphicon.glyphicon-menu-left
 			.list-body
+			.list-nav.list-nav-right
+				span.glyphicon.glyphicon-menu-right
 	script(src='/javascripts/jquery-2.1.4.min.js')
 	script(src='https://cdn.jsdelivr.net/jquery.ui/1.11.4/jquery-ui.min.js')
 	script(src='/javascripts/bootstrap-min.js')
