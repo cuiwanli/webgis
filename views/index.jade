@@ -2,35 +2,43 @@ extends layout
 
 block content
 	#gismap
-		.view-control-btn
-			span.glyphicon.glyphicon-list
-		.view-control.view-control-hidden.col-xs-5.col-sm-5.col-md-4.col-lg-3
-			.hide-view-control-btn(title='hide')
-				span.glyphicon.glyphicon-menu-left
-			.select-basemap
-				label View Mode
-				ul
-					li
-						a.changeBT oceans
-					li
-						a.changeBT satellite
-			.select-layers
-				label Select Layers
-				br
-				.layer-btn(data-type='layer1')
-					label layer1
-					.layer-symbol.layer-layer1
-				.layer-btn(data-type='layer2')
-					label layer2
-					.layer-symbol.layer-layer2
-				.layer-btn(data-type='layer3')
-					label layer3
-					.layer-symbol.layer-layer3
-				.layer-btn(data-type='layer4')
-					label layer4
-					.layer-symbol.layer-layer4
+		.full-height.no-side-boundry.col-xs-12.col-sm-5.col-md-4.col-lg-3
+			.control-panel
+				.view-control-btn
+					span.glyphicon.glyphicon-menu-left.list-btn
+				.view-control.control-panel-shown
+					//.label-settings
+						span.glyphicon.glyphicon-cog
+					#view-settings
+						.select-basemap
+							label View Mode
+							ul
+								li
+									a.changeBT oceans
+								li
+									a.changeBT satellite
+						.select-layers
+							label Select Layers
+							br
+							.layer-btn(data-type='layer1')
+								label layer1
+								.layer-symbol.layer-layer1
+							.layer-btn(data-type='layer2')
+								label layer2
+								.layer-symbol.layer-layer2
+							.layer-btn(data-type='layer3')
+								label layer3
+								.layer-symbol.layer-layer3
+							.layer-btn(data-type='layer4')
+								label layer4
+								.layer-symbol.layer-layer4
+					.list-body.list-hidden
+					.bottom-indicator
+					#loader-holder
+						#loader
+						.loading-tip I'm trying, we'll get there, perhaps.
 		#viewDiv
-		.list-div.list-div-toggle
+		//.list-div.list-div-toggle
 			.list-head
 				span.glyphicon.glyphicon-menu-up.list-btn(title='come out!')
 			.list-nav.list-nav-left
