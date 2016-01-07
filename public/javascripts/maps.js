@@ -1,12 +1,21 @@
 function MarianaGis() {
+    function GLayer() {
+        this.
+    }
     var m = {
-        graphicsLayers: [],
-        graphics: [],
-        contents: []
+        graphicsLayers: {},
+        graphics: {},
+        contents: {}
     };
+    var layerIndex = 0;
+    var graphicIndex = 0;
+    var contentIndex = 0;
+    var baseType = 'oceans',
+        viewType
     var chunkIndex = {};
     require([
         "esri/Map",
+        "esri/views/MapView",
         "esri/views/SceneView",
         "esri/layers/GraphicsLayer",
         "esri/geometry/Polyline",
@@ -16,6 +25,7 @@ function MarianaGis() {
         "esri/PopupTemplate",
         "dojo/domReady!"
     ], function(Map,
+        MapView,
         SceneView,
         GraphicsLayer,
         Polyline,
@@ -23,36 +33,27 @@ function MarianaGis() {
         Graphic,
         Popup,
         PopupTemplate) {
-        //$(document).ready(function() {
-        //var map, view;
-        setView('oceans');
-        $('.changeBT').click(function() {
-            $('body').find('#viewDiv').remove();
-            var newDiv = $('<div>').attr('id', 'viewDiv');
-            $('body').append(newDiv);
-            setView($(this).text());
-        });
-        //var graphics = [];
+        setView(baseType);
 
-        function setView(baseType) {
+        function setView(baseType, viewType) {
             m.map = new Map({
                 basemap: baseType
             });
-
-            console.log('mapped');
-            m.view = new SceneView({
-                container: "viewDiv", //reference to the scene div created in step 5
-                map: m.map, //reference to the map object created before the scene
-                scale: 6000000, //sets the initial scale to 1:50,000,000
-                center: [146, 16, 0], //sets the center point of view with lon/lat
-            });
-            /*m.view = new MapView({
-                container: "viewDiv", //reference to the scene div created in step 5
-                map: m.map, //reference to the map object created before the scene
-                zoom: 7, //sets the zoom level based on level of detail (LOD)
-                center: [146, 16] //sets the center point of view in lon/lat
-            });
-            */
+            if (viewType == '3D') {
+                m.view = new SceneView({
+                    container: "viewDiv", //reference to the scene div created in step 5
+                    map: m.map, //reference to the map object created before the scene
+                    scale: 6000000, //sets the initial scale to 1:50,000,000
+                    center: [146, 16, 0], //sets the center point of view with lon/lat
+                });
+            } else {
+                m.view = new MapView({
+                    container: "viewDiv", //reference to the scene div created in step 5
+                    map: m.map, //reference to the map object created before the scene
+                    zoom: 7, //sets the zoom level based on level of detail (LOD)
+                    center: [146, 16] //sets the center point of view in lon/lat
+                });
+            }
             m.view.then(function() {})
         };
 
@@ -67,7 +68,7 @@ function MarianaGis() {
             })
         }
 
-        m.loadMoreGraphics = function loadMoreGraphics(graphicsLayer) {
+        function loadMoreGraphics(graphicsLayer) {
             chunkIndex[graphicsLayer.id]++;
             return function() {
                 var url = '/graphics?chunkIndex=' + chunkIndex[graphicsLayer.id];
@@ -91,7 +92,7 @@ function MarianaGis() {
         }
 
         function initGraphics(graphicsLayer) {
-            var initUrl = '/graphics?layerid='+graphicsLayer.id+'chunkIndex=0';
+            var initUrl = '/graphics?layerid=' + graphicsLayer.id + 'chunkIndex=0';
             getData(initUrl, graphicsLayer);
             chunkIndex[graphicsLayer.id] = 0;
         }
@@ -127,5 +128,8 @@ function MarianaGis() {
         };
         //})
     });
+
+    m.setView = setView;
+    m.loadMoreGraphics = loadMoreGraphics;
     return m;
 };
