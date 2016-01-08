@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Promise = require('bluebird');
-
+var _ = require('lodash');
 var mongoDb = require('mongodb');
 Promise.promisifyAll(mongoDb);
 var MongoClient = mongoDb.MongoClient;
@@ -31,10 +31,66 @@ router.post('/tinymce', function(req, res, next) {
 MongoClient.connectAsync(url).then(function(db) {
     console.log('mongoDB connected!');
     var graphics = db.collection(coll_name);
-    router.get('/graphics', function(req, res, next) {
-        graphics.findAsync().then(function(cursor) {
+
+    function generateGraphics() {
+        //insert layers
+        var layers = [{
+            id: 'L000',
+            name: 'random-layer0'
+        }, {
+            id: 'L002',
+            name: 'random-layer2'
+        }, {
+            id: 'L001',
+            name: 'random-layer1'
+        }]
+        var gnum = _.range(1000);
+        var lanRange = 35;
+        var lanMin = 125;
+        var latRange = 18;
+        var latMin = 8;
+        var verRange = 11000;
+        var verMin = 0;
+        _.forEach(layers, function(layer, index) {
+            console.log('layer-' + layer.id + ' start generating:');
+            var newGs = [];
+            _.forEach(gnum, function(val, index) {
+                var newPath = [];
+                var pathLength = 2 + Math.floor(Math.random() * 2);
+                for (var i = 0; i < pathLength; i++) {
+                    newPath.push([
+                        lanMin + Math.random() * lanRange,
+                        latMin + Math.random() * latRange,
+                        verMin + Math.random() * verRange
+                    ]);
+                }
+                var newG = {
+                    id: layer.id + 'G' + val,
+                    layerId: layer.id,
+                    name: layer.id + 'generated' + val,
+                    path: newPath,
+                    img: '/lib/line3/prew/Line3.PNG'
+                }
+                newGs.push(newG);
+                console.log('layer-' + layer.id + val);
+            })
+            graphics.insertManyAsync(newGs).then(function(r) {
+                console.log('layer-' + layer.id + 'insert sucessfull!');
+                //console.log(r);
+            }).catch(function(err) {
+                console.log('ERROR:layer-' + layer.id + 'insert failed!');
+                console.log(err);
+            })
+        })
+    }
+    router.get('/graphics?', function(req, res, next) {
+        graphics.findAsync({
+            layerId: req.query.layerId
+        }).then(function(cursor) {
             return cursor.toArrayAsync()
         }).then(function(docs) {
+            docs = _.slice(docs, req.query.chunkIndex * 30, req.query.chunkIndex * 30 + 30);
+            console.log(docs.length+'----docs send!!!');
             res.send(docs);
         }).catch(function(err) {
             res.send(err);
