@@ -128,7 +128,7 @@ require([
         myGis.loadAllGraphics = function(layerId) {
             for (;; this.chunkIndex[layerId]++) {
                 var newUrl = '/graphics?layerId=' + layerId + '&chunkIndex=' + this.chunkIndex[layerId];
-                if (!this.getData(newUrl, layerId)) {
+                if (!myGis.getData(newUrl, layerId)) {
                     console.log('Layer--' + layerId + ' all graphics loaded!');
                     break;
                 }
