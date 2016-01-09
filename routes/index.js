@@ -45,8 +45,8 @@ MongoClient.connectAsync(url).then(function(db) {
             name: 'random-layer1'
         }]
         var gnum = _.range(1000);
-        var lanRange = 35;
-        var lanMin = 125;
+        var lonRange = 35;
+        var lonMin = 125;
         var latRange = 18;
         var latMin = 8;
         var verRange = 11000;
@@ -59,7 +59,7 @@ MongoClient.connectAsync(url).then(function(db) {
                 var pathLength = 2 + Math.floor(Math.random() * 2);
                 for (var i = 0; i < pathLength; i++) {
                     newPath.push([
-                        lanMin + Math.random() * lanRange,
+                        lonMin + Math.random() * lonRange,
                         latMin + Math.random() * latRange,
                         verMin + Math.random() * verRange
                     ]);

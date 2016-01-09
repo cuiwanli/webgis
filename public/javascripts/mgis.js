@@ -19,8 +19,7 @@ require([
     Popup,
     PopupTemplate) {
     function MarianaGis() {
-        var myGis;
-        myGis = {
+        var myGis = {
             baseType: 'oceans',
             viewType: '3D',
             viewContainer: 'viewDiv',
@@ -28,9 +27,18 @@ require([
             graphics: {},
             contents: {},
             chunkIndex: {},
-            options: {}
+            options: {},
+            initGis: initGis,
+            addNewGraphic: addNewGraphic,
+            getData: getData,
+            loadMoreGraphics: loadMoreGraphics,
+            addContentToList: addContentToList,
+            loadAllGraphics: loadAllGraphics,
+            initGraphics: initGraphics,
+            initLayer: initLayer
         };
-        myGis.initGis = function(options) {
+
+        function initGis(options) {
             //gather the option args
             if (options) {
                 this.options = options;
@@ -67,9 +75,11 @@ require([
                 myGis.map.add(graphicsLayer);
             })
         }
-        myGis.addNewGraphic = function(layerId, data) {
+
+        function addNewGraphic(layerId, data) {
             var graphicsLayer = this.graphicsLayers[layerId];
             var polyline = new Polyline(data.path);
+            if (myGis.viewType === '2D') polyline = new Polyline(_.slice(data.path, 0, 2));
             var lineSymbol = new SimpleLineSymbol({
                 color: graphicsLayer.color, //RGB color values as an array
                 width: 3
@@ -97,19 +107,19 @@ require([
             //graphics.push(polylineGraphic);
         };
 
-
-        myGis.getData = function(url, layerId) {
+        function getData(url, layerId) {
             $('#loader-holder').show();
-            $.get(url, function(datas) {
+            return $.get(url).then(function(datas) {
                 $('#loader-holder').hide();
                 _.forEach(datas, function(data, index) {
                     myGis.addNewGraphic(layerId, data);
                 });
-                return datas.length > 0
+                console.log('datas.length---' + datas.length);
+                return datas.length > 0;
             })
         }
 
-        myGis.loadMoreGraphics = function(layerId) {
+        function loadMoreGraphics(layerId) {
             return function() {
                 var url = '/graphics?layerId=' + layerId + '&chunkIndex=' + this.chunkIndex[layerId];
                 this.chunkIndex[layerId]++;
@@ -117,7 +127,7 @@ require([
             }
         }
 
-        myGis.addContentToList = function(contents) {
+        function addContentToList(contents) {
             _.forEach(contents, function(content, index) {
                 $('.list-body').append($('<div>').attr('class', 'list-item').append($('<h4>').attr('class', 'list-item-name').text(data.name).click(function() {
                     myGis.view.animateTo(polylineGraphic);
@@ -125,25 +135,38 @@ require([
             });
         }
 
-        myGis.loadAllGraphics = function(layerId) {
-            for (;; this.chunkIndex[layerId]++) {
-                var newUrl = '/graphics?layerId=' + layerId + '&chunkIndex=' + this.chunkIndex[layerId];
-                if (!myGis.getData(newUrl, layerId)) {
-                    console.log('Layer--' + layerId + ' all graphics loaded!');
-                    break;
-                }
-            }
+        function loadAllGraphics(layerId) {
+            var url = '/graphics?layerId=' + layerId + '&chunkIndex=' + myGis.chunkIndex[layerId];
+
+            function loadMore() {
+                $('#loader-holder').show();
+                $.get(url, function(datas) {
+                    $('#loader-holder').hide();
+                    _.forEach(datas, function(data, index) {
+                        myGis.addNewGraphic(layerId, data);
+                    });
+                    console.log('datas.length---' + datas.length);
+                    if (datas.length > 0) {
+                        myGis.chunkIndex[layerId]++;
+                        url = '/graphics?layerId=' + layerId + '&chunkIndex=' + myGis.chunkIndex[layerId];
+                        loadMore();
+                    }
+                })
+            };
+            loadMore();
         }
-        myGis.initGraphics = function(layerId) {
+
+        function initGraphics(layerId) {
             var initUrl = '/graphics?layerId=' + layerId + '&chunkIndex=0';
             this.getData(initUrl, layerId);
             this.chunkIndex[layerId] = 1;
-            console.log('this.options.loadAllGraphics---' + this.options.loadAllGraphics);
-            if (!(this.options.loadAllGraphics) === false) {
+            if (!(this.options.loadAllGraphics === false)) {
+                console.log('start loading allllll');
                 this.loadAllGraphics(layerId);
             }
         }
-        myGis.initLayer = function(layer) {
+
+        function initLayer(layer) {
             var newLayer = new GraphicsLayer(layer);
             var newColor = '#' + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10);
             newLayer.color = newColor;
@@ -172,16 +195,14 @@ require([
             console.log('Layer--' + layer.id + ' initiated!');
             this.initGraphics(layer.id);
         }
-
-        //})
         return myGis;
     };
-
 
     $(document).ready(function() {
         var mGis = new MarianaGis();
         mGis.initGis({
-            loadAllGraphics: 1
+            loadAllGraphics: false,
+            viewType: '2D'
         });
         var layers = [{
             id: 'L000',
