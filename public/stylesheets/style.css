@@ -4,7 +4,12 @@ body {
     padding: 0;
     overflow: hidden;
 }
-
+.select{
+    display: inline-block;
+    padding:4px;
+    border:none;
+    color: black;
+}
 .esri-ui-top-left {
     top: 30px;
 }
@@ -14,7 +19,9 @@ body {
     width: 100%;
     height: 100%;
 }
-
+.indicator{
+    height: 48px;
+}
 .full-height {
     height: 100%;
 }
@@ -41,7 +48,18 @@ body {
     position: relative;
     animation-timing-function: ease-out;
 }
-
+#search-bar{
+    padding: 2px 8px 2px 16px;
+}
+#search{
+    width: 70%;
+    border:2px solid;
+}
+.search-input{
+    width: 100%;
+    border:none;
+    color: black;
+}
 .view-control-btn {
     color: white;
     position: absolute;
@@ -49,15 +67,21 @@ body {
     left: 10px;
     z-index: 9;
 }
-
+.search-btn{
+    float: right;
+    top:-21px;
+    padding: 4px;
+    background-color:  #3793E7;
+}
 .view-control {
     height: 100%;
-    padding: 48px 0px 10px 0px;
     position: relative;
     background-color: white;
     box-shadow: 0px 0px 24px -5px rgba(0, 0, 0, 0.6);
-    overflow: scroll;
+    overflow: hidden;
     z-index: 1;
+    background-color: #3793E7;
+    color: white;
 }
 
 @keyframes show-control {
@@ -89,8 +113,6 @@ body {
 
 #view-settings {
     padding: 2px 12px 4px 12px;
-    box-shadow: 0px 20px 24px -24px rgba(0, 0, 0, 0.6);
-    margin-bottom: 20px;
 }
 
 span {
@@ -170,8 +192,11 @@ span {
 .list-body {
     position: relative;
     width: 100%;
+    height: 520px;
     padding: 5px 24px 4px 24px;
     background-color: white;
+    color: black;
+    overflow-y: scroll;
 }
 
 .list-item {
@@ -228,11 +253,11 @@ a {
 
 .layer-btn {
     width: 64px;
-    height: 40px;
+    height: 32px;
     margin: 4px 4px 4px 4px;
     padding: 4px 4px 4px 4px;
     text-align: center;
-    border: 1px solid lightgray;
+    border-radius: 1px;
     display: inline-block;
     cursor: pointer;
 }
@@ -299,7 +324,6 @@ a {
         transform: rotate(220deg);
     }
 }
-
 #loader::after {
     animation: animate2 1.5s ease-in-out infinite;
     clip-path: inset(0, 20px, 20px, 10px);
@@ -323,6 +347,5 @@ a {
         transform: rotate(140deg);
     }
 }
-
 
 /*******************************************loader*/

@@ -2,6 +2,7 @@ extends layout
 
 block content
 	#gismap
+		#viewDiv
 		.full-height.no-side-boundry.col-xs-12.col-sm-5.col-md-4.col-lg-3
 			.control-panel
 				.view-control-btn
@@ -9,14 +10,25 @@ block content
 				.view-control.control-panel-shown
 					//.label-settings
 						span.glyphicon.glyphicon-cog
+					.top-indicator.indicator
+					#search-bar
+						#search
+							input.search-input(type='text')
+							span.glyphicon.glyphicon-search.search-btn
+						a Advanced
 					#view-settings
-						.select-basemap
-							label View Mode
-							ul
-								li
-									a.changeBT oceans
-								li
-									a.changeBT satellite
+						.view-options
+							strong View Options
+							div.select.select-viewtype
+								select.changeVT
+									option(selected) 3D Globe
+									option 2D Map
+							div.select.select-maptype
+								select.changeBT
+									option(selected) oceans
+									option terrain
+									option topo
+									option satellite
 						.select-layers
 							label Select Layers
 							br
@@ -33,11 +45,10 @@ block content
 								label layer4
 								.layer-symbol.layer-layer4
 					.list-body.list-hidden
-					.bottom-indicator
+					.bottom-indicator.indicator
 					#loader-holder
 						#loader
-						.loading-tip I'm trying, we'll get there, perhaps.
-		#viewDiv
+						.loading-tip
 		//.list-div.list-div-toggle
 			.list-head
 				span.glyphicon.glyphicon-menu-up.list-btn(title='come out!')

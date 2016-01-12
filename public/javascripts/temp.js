@@ -1,17 +1,5 @@
-mm = function() {
-    m = {
-        a: a,
-        b: a
-    };
+var mm=2;
+var m=mm;
+m=3;
 
-    function a() {
-        console.log('a');
-    }
-
-    function b() {
-        console.log('b');
-    }
-    return m;
-}();
-mm.a();
 console.log(mm);

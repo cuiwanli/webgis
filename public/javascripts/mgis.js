@@ -28,6 +28,7 @@ require([
             contents: {},
             chunkIndex: {},
             options: {},
+            highLightedGraphics: [],
             initGis: initGis,
             addNewGraphic: addNewGraphic,
             getData: getData,
@@ -35,7 +36,9 @@ require([
             addContentToList: addContentToList,
             loadAllGraphics: loadAllGraphics,
             initGraphics: initGraphics,
-            initLayer: initLayer
+            initLayer: initLayer,
+            highLightGraphic: highLightGraphic,
+            unHighLightAll: unHighLightAll
         };
 
         function initGis(options) {
@@ -46,7 +49,7 @@ require([
                 this.viewType = options.viewType || this.viewType;
                 this.viewContainer = options.viewContainer || this.viewContainer;
             }
-
+            var view;
             //set map
             this.map = new Map({
                 basemap: this.baseType
@@ -54,26 +57,36 @@ require([
 
             //set view
             if (this.viewType == '3D') {
-                this.view = new SceneView({
+                view = new SceneView({
                     container: this.viewContainer,
                     map: this.map,
                     scale: 6000000,
                     center: [146, 16, 0],
+                    //camera: {
+                    //    position: [146, 16, 2183],
+                    //    tilt: 80
+                    //}
                 });
             } else {
-                this.view = new MapView({
+                view = new MapView({
                     container: this.viewContainer,
                     map: this.map,
                     zoom: 7,
                     center: [146, 16]
                 });
             }
-
+            view.then(function() {
+                view.on('click', function(evt) {
+                    if (evt.graphic) {
+                        myGis.highLightGraphic(evt.graphic);
+                    }
+                });
+            });
             //if it's a re-init, restore the graphics
             _.forEach(this.graphicsLayers, function(graphicsLayer, layerId) {
-                console.log(layerId);
                 myGis.map.add(graphicsLayer);
             })
+            this.view = view;
         }
 
         function addNewGraphic(layerId, data) {
@@ -84,12 +97,14 @@ require([
                 color: graphicsLayer.color, //RGB color values as an array
                 width: 3
             });
-            var newContent = '<div>start: lat=' + data.path[0][0] + ' lon=' + data.path[0][1] + '</div>' +
-                '<div>end: lat=' + data.path[1][0] + ' lon=' + data.path[1][1] + '</div>' +
+
+            var newContent = '<div>start: lat=' + data.path[0][0] + ' lon=' + data.path[0][1] + ' alt=' + data.path[0][2] + '</div>' +
+                '<div>end: lat=' + data.path[1][0] + ' lon=' + data.path[1][1] + ' alt=' + data.path[1][2] + '</div>' +
                 '<img class="prev-img" src=' + data.img.substring(0, data.img.lastIndexOf('.')) + "-min.jpg" + ' alt="image preview" data-raw=' + data.img + ' onclick="showImg(this)" />' +
                 '<a href=' + data.img + ' download=' + data.img.substring(data.img.lastIndexOf('/')) + '><span class="glyphicon glyphicon-save" />download</a>';
             var polylineGraphic = new Graphic({
                 id: data.id,
+                layerId: layerId,
                 title: data.name,
                 geometry: polyline, //add the geometry created in step 4
                 symbol: lineSymbol, //add the symbol created in step 5
@@ -100,12 +115,46 @@ require([
             });
             $('.list-body').append($('<div>').attr('class', 'list-item').append($('<h4>').attr('class', 'list-item-name').text(data.name).click(function() {
                 myGis.view.animateTo(polylineGraphic);
+                myGis.highLightGraphic(polylineGraphic);
             })).append(newContent));
             this.graphics[data.id] = polylineGraphic;
             //Add the graphic to the GraphicsLayer
             graphicsLayer.add(polylineGraphic); //graphicsLayer was created in step 2
             //graphics.push(polylineGraphic);
         };
+
+
+        function unHighLightAll() {
+            var highLightedGraphics = this.highLightedGraphics
+            _.forEach(highLightedGraphics, function(graphic, index) {
+                myGis.graphicsLayers[graphic.layerId].remove(graphic);
+                myGis.graphicsLayers[graphic.layerId].add(myGis.graphics[graphic.originId]);
+            })
+            this.highLightedGraphics = [];
+        }
+
+        function highLightGraphic(graphic) {
+            if (!graphic.originId) { //only highlighted graphics have attr'originId'
+                this.unHighLightAll();
+                var lineSymbol = new SimpleLineSymbol({
+                    color: [255, 0, 0],
+                    width: 5
+                });
+                var highLightedGraphic = new Graphic({
+                    id: graphic.id + '-H',
+                    originId: graphic.id,
+                    layerId: graphic.layerId,
+                    title: graphic.title,
+                    geometry: graphic.geometry, //add the geometry created in step 4
+                    symbol: lineSymbol, //add the symbol created in step 5
+                    popupTemplate: graphic.popupTemplate
+                });
+                this.graphicsLayers[graphic.layerId].remove(graphic);
+                this.graphicsLayers[graphic.layerId].add(highLightedGraphic);
+                this.highLightedGraphics.push(highLightedGraphic);
+                console.log('highLighted');
+            }
+        }
 
         function getData(url, layerId) {
             $('#loader-holder').show();
@@ -168,25 +217,27 @@ require([
 
         function initLayer(layer) {
             var newLayer = new GraphicsLayer(layer);
-            var newColor = '#' + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10);
+            var newColor = 'rgb(' + Math.floor(Math.random() * 255) + ', ' + Math.floor(Math.random() * 255) + ', ' + Math.floor(Math.random() * 255) + ')';
             newLayer.color = newColor;
             var newBtn = $('<div>').attr({
                 'class': 'layer-btn',
                 'data-layerid': layer.id,
                 'data-color': newColor
-            });
-            newBtn.append($('<label>').text(layer.id))
-                .append($('<div>').attr('class', 'layer-symbol').css('border-color', newColor));
+            }).text(layer.id).css('background-color', newColor);
             newBtn.click(function() {
-                var sym = $(this).find('.layer-symbol');
-                console.log(myGis.graphicsLayers[$(this).data('layerid')]);
-                if (sym.hasClass('layer-symbol-inactive')) {
-                    sym.removeClass('layer-symbol-inactive');
-                    console.log(myGis.graphicsLayers[$(this).data('layerid')]);
-                    myGis.map.add(myGis.graphicsLayers[$(this).data('layerid')]);
+                var btn = $(this);
+                if (btn.css('background-color') == btn.data('color')) {
+                    myGis.map.remove(myGis.graphicsLayers[btn.data('layerid')]);
+                    btn.css({
+                        'background-color': 'white',
+                        'color': 'black'
+                    });
                 } else {
-                    sym.addClass('layer-symbol-inactive');
-                    myGis.map.remove(myGis.graphicsLayers[$(this).data('layerid')]);
+                    myGis.map.add(myGis.graphicsLayers[btn.data('layerid')]);
+                    btn.css({
+                        'background-color': btn.data('color'),
+                        'color': 'white'
+                    });
                 }
             });
             $('.select-layers').append(newBtn);
@@ -201,8 +252,7 @@ require([
     $(document).ready(function() {
         var mGis = new MarianaGis();
         mGis.initGis({
-            loadAllGraphics: false,
-            viewType: '2D'
+            loadAllGraphics: false
         });
         var layers = [{
             id: 'L000',
@@ -219,9 +269,14 @@ require([
                 mGis.initLayer(layer);
             })
         })
-        $('.changeBT').click(function() {
+        $('.changeBT').change(function() {
             mGis.initGis({
-                baseType: $(this).text()
+                baseType: $(this).val()
+            });
+        })
+        $('.changeVT').change(function() {
+            mGis.initGis({
+                viewType: $(this).val().substring(0, 2)
             });
         })
         $('.list-btn').click(function() {
