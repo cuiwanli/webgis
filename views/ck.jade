@@ -1,0 +1,10 @@
+extends layout
+
+block content
+	.col-xs-12.col-sm-12.col-md-8.col-md-offset-2.col-lg-6.col-lg-offset-3
+		form#frm(method='post' action='/tinymce' enctype='multipart/form-data')
+			textarea#ck1(name='fuckmce')
+			input(type='file' name='kjvkyu' style='opacity: 0;')
+	script(src='/javascripts/jquery-2.1.4.min.js')
+	script(src='/ckeditor/ckeditor.js')
+	script(src='/javascripts/ck.js')

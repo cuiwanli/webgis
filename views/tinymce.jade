@@ -1,9 +1,35 @@
 extends layout
 
 block content
-	form(method='post' action='/tinymce' enctype='multipart/form-data')
-		input(type='submit')
-		p.active write here
+	form#frm_upload(method="post" action="/tinymce" enctype="multipart/form-data")
+		input#owner.invisible(name="owner", type="text")
+		#ul_title
+			.title.ui.transparent.input
+				input.title.upload_text(name="title" rows="1" autofocus required="required" placeholder="输入标题")
+		#type_src
+			label.type_src 类型:
+				select#upload-type.ui.dropdown.transparent(name="type")
+					option(value="news") 新闻和进展
+					option(value="mtin") 会议通知
+					option(value="data") 数据和资料
+					option(value="refe") 参考文献
+				.ui.transparent.input
+					input#date(type="Date" name="date" value='2015-01-01' required="required")
+				.ui.transparent.input
+					input#source(type="text" name="source" placeholder="输入文章/资料来源" required="required")
+		#upload_news
+			textarea#input-body(name='body' rows='10')
+	form#frm_file(method="post" action="/tinymce" enctype="multipart/form-data" hidden)
+		input#file(type='file' name='file' hidden)
+		#upload_data
+		#upload_refe
+		#ops
+			button.ui.labeled.icon.button.basic.teal 提交
+				i.icon.cloud.upload
+			button.ui.labeled.icon.button.basic.red 取消
+				i.icon.refresh
+			button.ui.labeled.icon.button.basic.blue.replace replace
+				i.icon.refresh
 	script(src='/javascripts/jquery-2.1.4.min.js')
-	script(src='/javascripts/tinymce/tinymce.min.js')
+	script(src='/tinymce/tinymce.min.js')
 	script(src='/javascripts/mymce.js')

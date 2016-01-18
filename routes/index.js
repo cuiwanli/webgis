@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('bluebird');
 var _ = require('lodash');
+var fs = require('fs-extra');
 var mongoDb = require('mongodb');
 Promise.promisifyAll(mongoDb);
 var MongoClient = mongoDb.MongoClient;
@@ -15,6 +16,9 @@ var url = process.env.MONGO_URl || 'mongodb://127.0.0.1:37127/test';
 //heroku config:set MONGOLAB_URL=mongodb://mariana:MarianaDB1@ds035485.mongolab.com:35485/zyoldb1
 var coll_name = 'graphics'; //mongodb collection name
 
+var formidable = require('formidable'); //formidable to handle form upload
+var util = require('util');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', {
@@ -25,7 +29,43 @@ router.get('/tinymce', function(req, res, next) {
     res.render('tinymce');
 });
 router.post('/tinymce', function(req, res, next) {
-    console.log(req);
+
+    var form = new formidable.IncomingForm({
+                uploadDir: './public/images'
+            });
+    form.on('field', function(name, value) {
+        res.send(value);
+    });
+    form.on('file', function(name, file) {
+        var tempPath = file.path;
+        var newPath = './public/images/' + file.name;
+        fs.rename(tempPath, newPath);
+        res.json({
+            location: '/images/' + file.name
+        });
+    });
+
+    form.parse(req);
+});
+router.get('/ck', function(req, res, next) {
+    res.render('ck');
+});
+router.post('/ck', function(req, res, next) {
+
+    var form = new formidable.IncomingForm();
+    form.on('field', function(name, value) {
+        res.send(value);
+    });
+    form.on('file', function(name, file) {
+        var tempPath = file.path;
+        var newPath = '/images/' + file.name;
+        fs.rename(tempPath, newPath);
+        res.json({
+            location: newPath
+        });
+    });
+
+    form.parse(req);
 });
 
 MongoClient.connectAsync(url).then(function(db) {
@@ -90,7 +130,7 @@ MongoClient.connectAsync(url).then(function(db) {
             return cursor.toArrayAsync()
         }).then(function(docs) {
             docs = _.slice(docs, req.query.chunkIndex * 30, req.query.chunkIndex * 30 + 30);
-            console.log(docs.length+'----docs send!!!');
+            console.log(docs.length + '----docs send!!!');
             res.send(docs);
         }).catch(function(err) {
             res.send(err);

@@ -1,0 +1,208 @@
+@charset "UTF-8";
+html,
+body {
+  font: 100% Helvetica, Tahoma, Arial, STXihei, “华文细黑”, “Microsoft YaHei”, “微软雅黑”, SimSun, “宋体”, Heiti, “黑体”, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+a {
+  color: #00B7FF;
+  cursor: pointer;
+}
+
+p {
+  font-size: 16px;
+}
+
+.select {
+  display: inline-block;
+}
+
+.esri-ui-top-left {
+  top: 30px;
+}
+
+#gismap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.indicator {
+  height: 24px;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.no-side-boundry {
+  padding: 0px;
+  margin: 0px;
+}
+
+.popup-img {
+  width: 100%;
+}
+
+#viewDiv {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#control-place-holder {
+  z-index: 1;
+}
+
+#search {
+  width: 70%;
+}
+
+#search-bar {
+  font-size: 0.8rem;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  color: black;
+}
+
+.view-control-btn {
+  position: relative;
+  left: 100%;
+  z-index: 9;
+}
+
+.view-control {
+  height: 100%;
+  position: relative;
+  padding: 2px 12px 4px 12px;
+  box-shadow: 0px 0px 24px -5px rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  background-color: #FFF;
+}
+
+.view-settings {
+  padding: 0px 4px 4px 8px;
+}
+
+@-webkit-keyframes show-control {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 0%;
+  }
+}
+
+@keyframes show-control {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 0%;
+  }
+}
+.control-panel-hidden {
+  -webkit-animation-name: show-control;
+          animation-name: show-control;
+  -webkit-animation-duration: 0.6s;
+          animation-duration: 0.6s;
+  -webkit-animation-direction: reverse;
+          animation-direction: reverse;
+  left: -100%;
+}
+
+.control-panel-shown {
+  -webkit-animation-name: show-control;
+          animation-name: show-control;
+  -webkit-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+  left: 0%;
+}
+
+span {
+  cursor: pointer;
+  text-align: center;
+}
+
+.list-btn {
+  position: relative;
+  right: 0px;
+  top: -20px;
+  color: white;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 40px;
+  box-shadow: inset 0px 0px 100px 0px rgba(0, 0, 0, 0.3);
+}
+
+.label-settings {
+  box-shadow: 0px 20px 24px -24px rgba(0, 0, 0, 0.6);
+}
+
+.list-head {
+  position: relative;
+  width: 100%;
+}
+
+.list-nav {
+  width: 40px;
+  padding: 8px;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+}
+
+.list-nav span {
+  font-size: 24px;
+  position: relative;
+}
+
+.list-nav-left {
+  left: 0px;
+}
+
+.list-nav-right {
+  right: 0px;
+}
+
+.list-body {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  background-color: white;
+  color: black;
+  overflow-y: scroll;
+}
+
+.list-item {
+  display: inline-block;
+  margin: auto;
+  overflow: hidden;
+  border-top: 1px solid lightgray;
+}
+
+.list-item-name {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.full-img {
+  position: absolute;
+  z-index: -99;
+  width: 0px;
+}
+
+.prev-img {
+  cursor: -webkit-zoom-in;
+  cursor: zoom-in;
+  max-width: 100%;
+}

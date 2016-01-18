@@ -214,33 +214,95 @@ require([
                 this.loadAllGraphics(layerId);
             }
         }
+        myGis.getNextColor = function() {
+            var colors = [{
+                name: 'red',
+                rgb: 'rgb(255, 0, 0)',
+                hex: '#FF0000'
+            }, {
+                name: 'orange',
+                rgb: 'rgb(255, 165, 0)',
+                hex: '#FFA500'
+            },  {
+                name: 'green',
+                rgb: 'rgb(0, 128, 0)',
+                hex: '#008000'
+            },{
+                name: 'blue',
+                rgb: 'rgb(0, 0, 255)',
+                hex: '#0000FF'
+            }, {
+                name: 'purple',
+                rgb: 'rgb(128, 0, 128)',
+                hex: '#800080'
+            }, {
+                name: 'yellow',
+                rgb: 'rgb(255, 255, 0)',
+                hex: '#FFFF00'
+            },  {
+                name: 'teal',
+                rgb: 'rgb(0, 128, 128)',
+                hex: '#008080'
+            }, {
+                name: 'olive',
+                rgb: 'rgb(128, 128, 0)',
+                hex: '#808000'
+            },{
+                name: 'violet',
+                rgb: 'rgb(238, 130, 238)',
+                hex: '#EE82EE'
+            }, {
+                name: 'pink',
+                rgb: 'rgb(255, 192, 203)',
+                hex: '#FFC0CB'
+            }, {
+                name: 'brown',
+                rgb: 'rgb(165, 42, 42)',
+                hex: '#A52A2A'
+            }, {
+                name: 'gray',
+                rgb: 'rgb(128, 128, 128)',
+                hex: '#808080'
+            }, {
+                name: 'black',
+                rgb: 'rgb(0, 0, 0)',
+                hex: '#000000'
+            }];
+            var nextI = 0;
+            return function() {
+                nextI++;
+                return colors[nextI];
+            }
+        }();
 
         function initLayer(layer) {
             var newLayer = new GraphicsLayer(layer);
-            var newColor = 'rgb(' + Math.floor(Math.random() * 255) + ', ' + Math.floor(Math.random() * 255) + ', ' + Math.floor(Math.random() * 255) + ')';
-            newLayer.color = newColor;
-            var newBtn = $('<div>').attr({
-                'class': 'layer-btn',
+            var newColor = this.getNextColor();
+            newLayer.color = newColor.rgb;
+            var newBtn = $('<button>').attr({
+                'class': 'layer-btn ui button basic ' + newColor.name,
                 'data-layerid': layer.id,
-                'data-color': newColor
-            }).text(layer.id).css('background-color', newColor);
+                'data-color': newColor.name
+            }).text(layer.id); //.css('background-color', newColor.rgb);
             newBtn.click(function() {
                 var btn = $(this);
-                if (btn.css('background-color') == btn.data('color')) {
+                if (btn.hasClass(btn.data('color'))) {
                     myGis.map.remove(myGis.graphicsLayers[btn.data('layerid')]);
-                    btn.css({
-                        'background-color': 'white',
-                        'color': 'black'
-                    });
+                    btn.removeClass(btn.data('color'));
+                        /*btn.css({
+                            'background-color': 'white',
+                            'color': 'black'
+                        });*/
                 } else {
                     myGis.map.add(myGis.graphicsLayers[btn.data('layerid')]);
-                    btn.css({
-                        'background-color': btn.data('color'),
-                        'color': 'white'
-                    });
+                    btn.addClass(btn.data('color'));
+                    /* btn.css({
+                         'background-color': btn.data('color'),
+                         'color': 'white'
+                     });*/
                 }
             });
-            $('.select-layers').append(newBtn);
+            $('#select-layers').append(newBtn);
             this.graphicsLayers[layer.id] = newLayer;
             this.map.add(newLayer);
             console.log('Layer--' + layer.id + ' initiated!');
@@ -270,63 +332,26 @@ require([
             })
         })
         $('.changeBT').change(function() {
+            console.log($(this).val());
             mGis.initGis({
                 baseType: $(this).val()
             });
         })
         $('.changeVT').change(function() {
+            console.log($(this).val());
             mGis.initGis({
-                viewType: $(this).val().substring(0, 2)
+                viewType: $(this).val()
             });
         })
-        $('.list-btn').click(function() {
+        $('.view-control-btn').click(function() {
             if ($('.view-control').hasClass('control-panel-hidden')) {
                 $('.view-control').switchClass('control-panel-hidden', 'control-panel-shown');
-                $(this).switchClass('glyphicon-menu-right', 'glyphicon-menu-left');
+                $(this).switchClass('btn-hidden', 'btn-shown');
+                $(this).find('i').switchClass('right', 'left');
             } else {
                 $('.view-control').switchClass('control-panel-shown', 'control-panel-hidden');
-                $(this).switchClass('glyphicon-menu-left', 'glyphicon-menu-right');
-            }
-        })
-        $('.hide-view-control-btn').click(function() {
-                $('.view-control').switchClass('view-control-shown', 'view-control-hidden');
-            })
-            /*$('.list-btn').click(function() {
-                if ($(this).hasClass('glyphicon-pushpin')) {
-                    if ($(this).hasClass('btn-pinned')) {
-                        $(this).removeClass('btn-pinned').removeClass('glyphicon-pushpin').addClass('glyphicon-menu-up').attr('title', 'come out!');
-                        $('.list-div').css({
-                            'bottom': '-260px',
-                            'opacity': 0.8
-                        }).addClass('list-div-toggle');
-                    } else {
-                        $(this).addClass('btn-pinned');
-                        $('.list-div').css({
-                            'bottom': '0px',
-                            'opacity': 1
-                        }).removeClass('list-div-toggle');
-                    }
-                }
-            })*/
-        $('.list-div').hover(function() {
-            $(this).css({
-                'bottom': '0px',
-                'opacity': 1
-            })
-            var btn = $(this).find('.list-btn');
-            if (btn.hasClass('glyphicon-menu-up')) {
-                btn.removeClass('glyphicon-menu-up').addClass('glyphicon-pushpin').attr('title', 'stop hidding!');
-            }
-        }, function() {
-            var btn = $(this).find('.list-btn');
-            if (btn.hasClass('btn-pinned')) {
-                btn.removeClass('glyphicon-menu-up').addClass('glyphicon-pushpin').attr('title', 'move some space!');
-            } else {
-                $(this).css({
-                    'bottom': '-260px',
-                    'opacity': 0.8
-                })
-                btn.removeClass('glyphicon-pushpin').addClass('glyphicon-menu-up').attr('title', 'come out!');
+                $(this).switchClass('btn-shown', 'btn-hidden');
+                $(this).find('i').switchClass('left', 'right');
             }
         })
     })
