@@ -35,7 +35,7 @@ app.use('/map/fonts', express.static('./public/fonts'));
 app.use('/map/lib', express.static('../lib'));
 //app.use('/arcgis_js_api', express.static('../arcgis_js_api/3.15compact'));
 
-app.use('/webgis', routes);
+app.use('/map', routes);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
