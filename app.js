@@ -19,14 +19,23 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/arcgis_js_api', express.static('../arcgis_js_api/4.0beta3'));
-app.use('/fonts', express.static('./public/fonts'));
-app.use('/lib', express.static('../lib'));
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+//app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/map/', express.static('public'));
+//app.use('/arcgis_js_api', express.static('../arcgis_js_api/4.0beta3'));
+app.use('/map/fonts', express.static('./public/fonts'));
+app.use('/map/lib', express.static('../lib'));
 //app.use('/arcgis_js_api', express.static('../arcgis_js_api/3.15compact'));
 
-app.use('/', routes);
+app.use('/webgis', routes);
 app.use('/users', users);
 
 // catch 404 and forward to error handler

@@ -170,7 +170,7 @@ require([
 
         function loadMoreGraphics(layerId) {
             return function() {
-                var url = '/graphics?layerId=' + layerId + '&chunkIndex=' + this.chunkIndex[layerId];
+                var url = '/webgis/graphics?layerId=' + layerId + '&chunkIndex=' + this.chunkIndex[layerId];
                 this.chunkIndex[layerId]++;
                 return this.getData(url, layerId); //returns false if nothing more
             }
@@ -185,7 +185,7 @@ require([
         }
 
         function loadAllGraphics(layerId) {
-            var url = '/graphics?layerId=' + layerId + '&chunkIndex=' + myGis.chunkIndex[layerId];
+            var url = '/webgis/graphics?layerId=' + layerId + '&chunkIndex=' + myGis.chunkIndex[layerId];
 
             function loadMore() {
                 $('#loader-holder').show();
@@ -197,7 +197,7 @@ require([
                     console.log('datas.length---' + datas.length);
                     if (datas.length > 0) {
                         myGis.chunkIndex[layerId]++;
-                        url = '/graphics?layerId=' + layerId + '&chunkIndex=' + myGis.chunkIndex[layerId];
+                        url = '/webgis/graphics?layerId=' + layerId + '&chunkIndex=' + myGis.chunkIndex[layerId];
                         loadMore();
                     }
                 })
@@ -206,7 +206,7 @@ require([
         }
 
         function initGraphics(layerId) {
-            var initUrl = '/graphics?layerId=' + layerId + '&chunkIndex=0';
+            var initUrl = '/webgis/graphics?layerId=' + layerId + '&chunkIndex=0';
             this.getData(initUrl, layerId);
             this.chunkIndex[layerId] = 1;
             if (!(this.options.loadAllGraphics === false)) {
