@@ -11,7 +11,7 @@ var ObjectID = require('mongodb').ObjectID;
 //mongorestore -d test -u zhouzoro -p mydb1acc C:\zhouy\_wrkin\mongoDB-11-24\test
 //
 //var url = process.env.MONGOLAB_URL || 'mongodb://mariana:MarianaDB2@ds061464.mongolab.com:61464/zyoldb2';
-var url = process.env.MONGO_URl || 'mongodb://127.0.0.1:37127/test';
+var url = process.env.MONGO_URl || 'mongodb://127.0.0.1:65123/gis';
 //var url = ['mongodb://mariana:MarianaDB1@ds035485.mongolab.com:35485/zyoldb1', 'mongodb://mariana:MarianaDB2@ds061464.mongolab.com:61464/zyoldb2', 'mongodb://mariana:MarianaDB3@ds056698.mongolab.com:56698/zyoldb3'];
 //heroku config:set MONGOLAB_URL=mongodb://mariana:MarianaDB1@ds035485.mongolab.com:35485/zyoldb1
 var coll_name = 'graphics'; //mongodb collection name
@@ -31,8 +31,8 @@ router.get('/tinymce', function(req, res, next) {
 router.post('/tinymce', function(req, res, next) {
 
     var form = new formidable.IncomingForm({
-                uploadDir: './public/images'
-            });
+        uploadDir: './public/images'
+    });
     form.on('field', function(name, value) {
         res.send(value);
     });
@@ -71,6 +71,9 @@ router.post('/ck', function(req, res, next) {
 MongoClient.connectAsync(url).then(function(db) {
     console.log('mongoDB connected!');
     var graphics = db.collection(coll_name);
+    graphics.find().count(function(err, count) {
+        if (!count) generateGraphics()
+    })
 
     function generateGraphics() {
         //insert layers
