@@ -54,13 +54,23 @@ p
 #search
 	width: 70%
 
-#search-bar
-	font-size: 0.8rem
-
-.search-input
-	width: 100%
-	border: none
-	color: black
+.menu-container-sub
+	border: 1px solid lightgray
+	border-radius: 5px
+	padding: 8px
+	margin-bottom: 8px
+	box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.3)
+	.label
+		padding: 2px
+		border-bottom: 3px solid #2E5AAB
+		margin-bottom: 8px
+		a
+			margin-left: 16px
+	.search-input
+		width: 100%
+		border: none
+		color: black
+		margin: 2px
 
 .view-control-btn
 	position: relative
@@ -75,8 +85,6 @@ p
 	z-index: 1
 	background-color: $prim-color
 
-.view-settings
-	padding: 0px 4px 4px 8px
 
 @keyframes show-control
 	from

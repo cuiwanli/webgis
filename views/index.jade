@@ -8,15 +8,15 @@ block content
 				button.ui.circular.blue.icon.button.view-control-btn.btn-shown
 					i.angle.left.icon
 				.top-indicator.indicator
-				label Search
-					a Advanced
-				.advanced-search
-				#search-bar.view-settings.ui.search
+				#search-bar.view-settings.ui.search.menu-container-sub
+					.label Search
+						a Advanced
+					.advanced-search
 					#search.ui.icon.input
 						input.prompt(type='text' placeholder="Find data")
 						i.search.icon
-				label View Options
-				#view-options.view-settings
+				#view-options.view-settings.menu-container-sub
+					.label View Options
 					select.ui.dropdown.changeVT
 						option(value='3D') 3D Globe
 						option(value='2D') 2D Map
@@ -25,18 +25,15 @@ block content
 						option(value='terrain') terrain
 						option(value='topo') topo
 						option(value='satellite') satellite
-				label Select Layers
-				#select-layers.view-settings
-				.list-body.list-hidden
-	script(src='/map/javascripts/jquery-2.1.4.min.js')
+				.menu-container-sub
+					.label Select Layers
+					#select-layers.view-settings
+				.menu-container-sub
+					.list-body.list-hidden
+	script(src='/map/javascripts/dist/jquery-2.1.4.min.js')
 	script(src='https://cdn.jsdelivr.net/jquery.ui/1.11.4/jquery-ui.min.js')
-	//script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous")
-	//script(src='/map/javascripts/bootstrap-min.js')
-	script(src='/map/javascripts/dropdown.min.js')
-	//script(src='https://cdn.jsdelivr.net/semantic-ui/2.1.8/components/dropdown.min.js')
-	script(src='/map/javascripts/search.min.js')
-	//script(src='https://cdn.jsdelivr.net/semantic-ui/2.1.8/components/search.min.js')
-	script(src='/map/javascripts/lodash.min.js')
+	script(src='/map/semantic/semantic.min.js')
+	script(src='/map/javascripts/dist/lodash.min.js')
 	script(src='https://js.arcgis.com/4.0/')
-	script(src='/map/javascripts/intense.min.js')
-	script(src='/map/javascripts/mgis.js')
+	script(src='/map/javascripts/dist/intense.min.js')
+	script(src='/map/javascripts/dist/mgis.babeled.min.js')

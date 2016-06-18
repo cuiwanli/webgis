@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
 app.use('/map/', express.static('public'));
 //app.use('/arcgis_js_api', express.static('../arcgis_js_api/4.0beta3'));
 app.use('/map/fonts', express.static('./public/fonts'));
-app.use('/map/lib', express.static('../lib'));
+app.use('/lib', express.static('public/images'));
 //app.use('/arcgis_js_api', express.static('../arcgis_js_api/3.15compact'));
 
 app.use('/map', routes);
