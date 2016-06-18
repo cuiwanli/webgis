@@ -96,40 +96,14 @@ p {
   box-shadow: 0px 0px 24px -5px rgba(0, 0, 0, 0.6);
   z-index: 1;
   background-color: #FFF;
+  transition: left 0.4s ease-out;
 }
 
-@-webkit-keyframes show-control {
-  from {
-    left: -100%;
-  }
-  to {
-    left: 0%;
-  }
-}
-
-@keyframes show-control {
-  from {
-    left: -100%;
-  }
-  to {
-    left: 0%;
-  }
-}
 .control-panel-hidden {
-  -webkit-animation-name: show-control;
-  animation-name: show-control;
-  -webkit-animation-duration: 0.6s;
-  animation-duration: 0.6s;
-  -webkit-animation-direction: reverse;
-  animation-direction: reverse;
   left: -100%;
 }
 
 .control-panel-shown {
-  -webkit-animation-name: show-control;
-  animation-name: show-control;
-  -webkit-animation-duration: 0.5s;
-  animation-duration: 0.5s;
   left: 0%;
 }
 
